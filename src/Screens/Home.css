@@ -1,0 +1,16 @@
+.home-container {
+  text-align: center;
+}
+.home-page-link {
+  text-decoration: none;
+  background-color: #323a45;
+  color: white;
+  padding: 20px;
+  border-radius: 35px;
+}
+.home-page-link:hover {
+  text-decoration: none;
+  border: 1px solid #323a45;
+  background-color: white;
+  color: #323a45;
+}
