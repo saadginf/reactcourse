@@ -8,7 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Search from "./Screens/Search";
 import Calendar from "./Screens/Calendar";
 import Setting from "./Screens/Setting";
-
+import Login from "./Screens/Login";
 function App() {
   return (
     <BrowserRouter>
@@ -19,6 +19,7 @@ function App() {
           <Route path="/calendar" exact component={Calendar} />
           <Route path="/settings" exact component={Setting} />
           <Route path="/add" exact component={Add} />
+          {/* <Route path="/login" exact component={Login} /> */}
           <Redirect to="/home" />
         </Switch>
       </Layout>

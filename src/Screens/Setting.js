@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import AddUserModal from "../Modals/AddUserModal";
+import AddCountryModal from "../Modals/AddCountryModal";
 import "./Setting.css";
 const Setting = () => {
   const data = [
@@ -45,9 +46,14 @@ const Setting = () => {
     },
   ];
   const [showModal, setshowModal] = useState(false);
+  const [showCountModal, setshowCountModal] = useState(false);
   return (
     <div>
       <AddUserModal show={showModal} close={() => setshowModal(false)} />
+      <AddCountryModal
+        show={showCountModal}
+        close={() => setshowCountModal(false)}
+      />
       <div className="users-table-container">
         <h5>Users</h5>
         <Table striped bordered hover size="sm">
@@ -65,7 +71,9 @@ const Setting = () => {
                     <td>{user.id}</td>
                     <td>{user.username}</td>
                     {user.appRoles.map((role) => (
-                      <p>{role.roleName}</p>
+                      <>
+                        <span key={role.id}>{role.roleName + "; "}</span>
+                      </>
                     ))}
                   </tr>
                 ))
@@ -73,8 +81,24 @@ const Setting = () => {
           </tbody>
         </Table>
       </div>
-      <div>
-        <Button onClick={() => setshowModal(true)}>ADD User</Button>
+      <div className="users-table-container">
+        <h5>Settings</h5>
+        <div className="settings-buttons">
+          <Button
+            variant="secondary"
+            size="lg"
+            onClick={() => setshowModal(true)}
+          >
+            Add User
+          </Button>
+          <Button
+            variant="secondary"
+            size="lg"
+            onClick={() => setshowCountModal(true)}
+          >
+            Add Country
+          </Button>
+        </div>
       </div>
     </div>
   );
