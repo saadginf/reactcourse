@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { connect } from "react-redux";
 import Select from "react-select";
-const Add = () => {
+import { getCountriesList } from "../actions/countriesActions";
+
+const Add = (props) => {
+  useEffect(() => {
+    if (!props.countries.length) {
+      props.getCountries();
+    }
+  }, []);
   const {
     register,
     handleSubmit,
@@ -94,11 +102,7 @@ const Add = () => {
             render={({ field }) => (
               <Select
                 {...field}
-                options={[
-                  { value: 1, label: "USA" },
-                  { value: 2, label: "India" },
-                  { value: 3, label: "Morocco" },
-                ]}
+                options={props.countries.length ? props.countries : null}
               />
             )}
           />
@@ -114,4 +118,12 @@ const Add = () => {
   );
 };
 
-export default Add;
+const mapStateToProps = ({ countries }) => ({
+  loading: countries.loading,
+  countries: countries.countries,
+});
+
+const mapDispatchToProps = {
+  getCountries: getCountriesList,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Add);

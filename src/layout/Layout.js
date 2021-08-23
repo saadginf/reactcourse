@@ -3,11 +3,11 @@ import SideBar from "./SideBar";
 import Footer from "./Footer";
 import TopBar from "./TopBar";
 
-const Layout = ({ children }) => {
+const Layout = ({ children, user, handlCick }) => {
   return (
     <div>
       <SideBar />
-      <TopBar />
+      <TopBar user={user} handlCick={handlCick} />
       <div className="main-container">{children}</div>
       <Footer />
     </div>

@@ -5,20 +5,22 @@ import { useForm } from "react-hook-form";
 import "./Login.css";
 import logo from "../assets/logo2.PNG";
 import Footer from "../layout/Footer";
+import { loginUser } from "../actions/authActions";
+import { connect } from "react-redux";
 
-const Login = () => {
+const Login = (props) => {
   const { register, handleSubmit } = useForm();
   const [error, seterror] = useState();
 
   const onSubmit = async (values) => {
-    console.log(values);
+    props.login(values);
   };
 
   return (
     <div className="login-container">
       <div id="login">
         <h2 className="text-center text-white pt-5">
-          Gestion des Activités <br />
+          Event Manager <br />
         </h2>
 
         <div className="container">
@@ -38,7 +40,7 @@ const Login = () => {
                     {error && <p className="text-danger">{error}</p>}
                   </div>
                   <div className="form-group">
-                    <label className="text-info">Nom d'Utilisateur:</label>
+                    <label className="text-info">Username:</label>
                     <br />
                     <input
                       type="text"
@@ -49,7 +51,7 @@ const Login = () => {
                     />
                   </div>
                   <div className="form-group">
-                    <label className="text-info">Mot de Passe:</label>
+                    <label className="text-info">Password:</label>
                     <br />
                     <input
                       type="password"
@@ -79,5 +81,13 @@ const Login = () => {
     </div>
   );
 };
+const mapStateToProps = ({ auth }) => ({
+  loading: auth.loading,
+  error: auth.error,
+  isAuth: auth.isAuth,
+});
 
-export default Login;
+const mapDispatchToProps = {
+  login: loginUser,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

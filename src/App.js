@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import Home from "./Screens/Home";
@@ -9,10 +8,27 @@ import Search from "./Screens/Search";
 import Calendar from "./Screens/Calendar";
 import Setting from "./Screens/Setting";
 import Login from "./Screens/Login";
-function App() {
-  return (
-    <BrowserRouter>
-      <Layout>
+import jwt_decode from "jwt-decode";
+
+import { setCurrentUser, logoutUser } from "./actions/authActions";
+import store from "./store";
+import { connect } from "react-redux";
+import { getToken } from "./auth/storage";
+
+if (localStorage.eventApp) {
+  const decode = jwt_decode(getToken());
+  const currentTime = Date.now() / 1000;
+  if (decode.exp < currentTime) {
+    store.dispatch(logoutUser());
+  } else {
+    store.dispatch(setCurrentUser(decode));
+  }
+}
+function App(props) {
+  let links;
+  if (props.isAuth) {
+    links = (
+      <Layout user={props.user} handlCick={props.logoutUser}>
         <Switch>
           <Route path="/home" exact component={Home} />
           <Route path="/search" exact component={Search} />
@@ -23,8 +39,26 @@ function App() {
           <Redirect to="/home" />
         </Switch>
       </Layout>
-    </BrowserRouter>
-  );
+    );
+  } else {
+    links = (
+      <Switch>
+        <Route path="/login" exact component={Login} />
+        <Redirect to="/login" />
+      </Switch>
+    );
+  }
+  return <BrowserRouter>{links}</BrowserRouter>;
 }
 
-export default App;
+const mapStateToProps = ({ auth }) => ({
+  loading: auth.loading,
+  error: auth.error,
+  isAuth: auth.isAuth,
+  user: auth.user,
+});
+const mapDispatchToProps = {
+  setCurrentUser: setCurrentUser,
+  logoutUser: logoutUser,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(App);

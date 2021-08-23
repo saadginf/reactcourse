@@ -60,7 +60,7 @@ const AddUserModal = (props) => {
                 Save
               </button>
             </div>
-            {Object.keys(errors).length != 0 && (
+            {Object.keys(errors).length !== 0 && (
               <p className="text-danger">{"Invalid Inputs"}</p>
             )}
           </form>

@@ -3,16 +3,24 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Modal, Button } from "react-bootstrap";
 import scc from "../assets/success.png";
+import { addCountry } from "../api/countries";
 
 const LieuxModal = (props) => {
   const [success, setSuccess] = useState(false);
+
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm();
+
   const onSubmit = async (values) => {
-    console.log(values);
+    let result = await addCountry(values);
+    if (!result.ok) {
+      console.log("Server Error");
+      return;
+    }
+    setSuccess(true);
   };
 
   return (
@@ -52,7 +60,7 @@ const LieuxModal = (props) => {
                 Save
               </button>
             </div>
-            {Object.keys(errors).length != 0 && (
+            {Object.keys(errors).length !== 0 && (
               <p className="text-danger">{"Formulaire Invalide"}</p>
             )}
           </form>

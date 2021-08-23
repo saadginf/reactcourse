@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import paginationFactory from "react-bootstrap-table2-paginator";
+import { connect } from "react-redux";
+import { getCountriesList } from "../actions/countriesActions";
 import "./Search.css";
-const Search = () => {
+const Search = (props) => {
+  useEffect(() => {
+    if (!props.countries.length) {
+      props.getCountries();
+    }
+  }, []);
   const data = [
     {
       id: 1,
@@ -74,9 +81,11 @@ const Search = () => {
     <div>
       <select className="form-control">
         <option value="#">Choose a Country</option>
-        <option value="1">USA</option>
-        <option value="2"> India</option>
-        <option value="3">Morocco</option>
+        {props.countries.length
+          ? props.countries.map((c) => (
+              <option value={c.value}>{c.label}</option>
+            ))
+          : null}
       </select>
       <div className="table-container">
         <BootstrapTable
@@ -94,4 +103,12 @@ const Search = () => {
   );
 };
 
-export default Search;
+const mapStateToProps = ({ countries }) => ({
+  loading: countries.loading,
+  countries: countries.countries,
+});
+
+const mapDispatchToProps = {
+  getCountries: getCountriesList,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Search);
